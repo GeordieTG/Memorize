@@ -10,10 +10,10 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         HStack {
-            CardView(text: "🚗", isFaceUp: true)
-            CardView(text: "💍")
-            CardView(text: "🐭")
-            CardView(text: "🍔")
+            let emojis = ["🚗", "💍", "🐭", "🍔"]
+            ForEach(emojis.indices, id: \.self) { index in
+                CardView(text: emojis[index])
+            }
         }
         .foregroundColor(.orange)
         .padding()
@@ -21,27 +21,25 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    
-    var text: String
-    var isFaceUp: Bool = false
+    let text: String
+    @State var isFaceUp = true
     
     var body: some View {
-        if isFaceUp {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12).fill(.white)
-                RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 2)
+        ZStack {
+            let base = RoundedRectangle(cornerRadius: 12)
+            if isFaceUp {
+                base.fill(.white)
+                base.stroke(lineWidth: 2)
                 Text(text).font(.largeTitle)
+            } else {
+                base
             }
-        } else {
-            RoundedRectangle(cornerRadius: 12)
-         }
+        }.onTapGesture {
+            isFaceUp.toggle()
+        }
     }
 }
 
-
-
-
-  
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
